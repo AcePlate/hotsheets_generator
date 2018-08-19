@@ -88,22 +88,23 @@ module.exports = class extends BlazeplateGenerator {
     await this.ensureDir(this.options.build.dest.root)
 
     // Client
-    let { client } = this.options.build.app.stack
-    if (client.id === 'reactjs') await this.composeWith(Generators.ReactJS)
+    // let { client } = this.options.build.app.stack
+    // if (client.id === 'reactjs') await this.composeWith(Generators.ReactJS)
 
     // Server
-    let { server } = this.options.build.app.stack
-    if (server.id === 'expressjs') await this.composeWith(Generators.ExpressJS)
-    if (server.id === 'falconpy') await this.composeWith(Generators.FalconPy)
-    if (server.id === 'flaskpy') await this.composeWith(Generators.FlaskPy)
+    // let { server } = this.options.build.app.stack
+    // if (server.id === 'expressjs') await this.composeWith(Generators.ExpressJS)
+    // if (server.id === 'falconpy') await this.composeWith(Generators.FalconPy)
+    // if (server.id === 'flaskpy') await this.composeWith(Generators.FlaskPy)
+    await this.composeWith(Generators.ExpressJS)
 
     // Infrastructure & Seed Data
     // TODO - conditionally invoke these generators...
-    await this.composeWith(Generators.SeedData);
+    // await this.composeWith(Generators.SeedData);
     await this.composeWith(Generators.DockerCompose);
 
     // TODO - implement a more robust logging solution
-    console.log('Finished Blazeplate generate')
+    console.log('Finished Codotype generate')
 
   }
 

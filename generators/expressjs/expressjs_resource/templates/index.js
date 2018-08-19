@@ -24,20 +24,20 @@ router.put('/:id', controller.update);
 
 // DELETE /<%= schema.identifier_plural %>/:id
 router.delete('/:id', controller.delete);
-<%_ for (index in schema.attributes) { _%>
-<%_ let attr = schema.attributes[index] _%>
-<%_ if (attr.datatype === 'RELATION' && attr.datatypeOptions.relationType === 'BELONGS_TO') { _%>
+<%_ for (index in schema.relations) { _%>
+<%_ let each = schema.relations[index] _%>
+<%_ if (each.type === 'BELONGS_TO') { _%>
 
-// GET /<%= schema.identifier_plural %>/:id/<%= attr.datatypeOptions.schema_identifier %>
-router.get('/:id/<%= attr.datatypeOptions.schema_identifier %>', controller.show<%= attr.datatypeOptions.schema_class_name %>);
-<%_ } else if (attr.datatype === 'RELATION' && attr.datatypeOptions.relationType === 'HAS_MANY') { _%>
+// GET /<%= schema.identifier_plural %>/:id/<%= each.schema.identifier %>
+router.get('/:id/<%= each.schema.identifier %>', controller.show<%= each.schema.class_name %>);
+<%_ } else if (each.type === 'HAS_MANY') { _%>
 
-// GET /<%= schema.identifier_plural %>/:id/<%= attr.datatypeOptions.schema_identifier_plural %>
-router.get('/:id/<%= attr.datatypeOptions.schema_identifier_plural %>', controller.show<%= attr.datatypeOptions.schema_class_name_plural %>);
-<%_ } else if (attr.datatype === 'RELATION' && attr.datatypeOptions.relationType === 'OWNS_MANY') { _%>
+// GET /<%= schema.identifier_plural %>/:id/<%= each.schema.identifier_plural %>
+router.get('/:id/<%= each.schema.identifier_plural %>', controller.show<%= each.schema.class_name_plural %>);
+<%_ } else if (each.type === 'OWNS_MANY') { _%>
 
-// GET /<%= schema.identifier_plural %>/:id/<%= attr.datatypeOptions.schema_identifier_plural %>
-router.get('/:id/<%= attr.datatypeOptions.schema_identifier_plural %>', controller.show<%= attr.datatypeOptions.schema_class_name_plural %>);
+// GET /<%= schema.identifier_plural %>/:id/<%= each.schema.identifier_plural %>
+router.get('/:id/<%= each.schema.identifier_plural %>', controller.show<%= each.schema.class_name_plural %>);
 <%_ } _%>
 <%_ } _%>
 

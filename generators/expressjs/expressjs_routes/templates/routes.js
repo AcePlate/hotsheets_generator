@@ -4,9 +4,9 @@ const router = require('express').Router()
 
 // Bootstrap API module routers
 router.use('/auth', require('./api/auth'))
-<%_ for (index in appSchema.schemas) { _%>
-router.use('/<%= appSchema.schemas[index].identifier_plural %>', require('./api/<%= appSchema.schemas[index].identifier %>'))
-<%_ } _%>
+<%_ appSchema.schemas.forEach((schema) => { _%>
+router.use('/<%= schema.identifier_plural %>', require('./api/<%= schema.identifier %>'))
+<%_ }) _%>
 
 // // // //
 

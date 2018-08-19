@@ -9,10 +9,7 @@ module.exports = class ExpressJsResources extends Generator {
     let dest = this.options.build.dest.expressjs.root
 
     // Iterates over each schema in the this.options.build.app.schemas array
-    for (var i = this.options.build.app.schemas.length - 1; i >= 0; i--) {
-
-      // Isolates the individual schema
-      let schema = this.options.build.app.schemas[i]
+    this.options.build.app.schemas.forEach(async (schema) => {
 
       // Defines the schema-specific destination
       let resourceDest = dest + 'server/api/' + schema.identifier
@@ -21,8 +18,6 @@ module.exports = class ExpressJsResources extends Generator {
       await this.ensureDir(resourceDest)
 
       // server/api/resource/resource.model.js
-      // TODO - find related schemas BEFORE rendering this template
-      // let relatedSchema = _.find(allSchemas, { _id: attr.datatypeOptions.schema_id })
       if (schema.identifier === 'user') {
         await this.copyTemplate(
           this.templatePath(__dirname, 'user.resource.model.js'),
@@ -51,7 +46,7 @@ module.exports = class ExpressJsResources extends Generator {
         { schema: schema }
       );
 
-    } // End loop
+    }) // End loop
   }
 
 };

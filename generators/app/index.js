@@ -100,8 +100,9 @@ module.exports = class extends BlazeplateGenerator {
 
     // Infrastructure & Seed Data
     // TODO - conditionally invoke these generators...
+    // TODO - abstract these generators into a separate repo...
     // await this.composeWith(Generators.SeedData);
-    await this.composeWith(Generators.DockerCompose);
+    // await this.composeWith(Generators.DockerCompose);
 
     // TODO - implement a more robust logging solution
     console.log('Finished Codotype generate')

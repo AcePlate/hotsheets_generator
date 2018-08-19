@@ -12,10 +12,7 @@ module.exports = class ExpressJsResourceSpec extends Generator {
     let specPaths = []
 
     // Iterates over each schema in the this.options.build.app.schemas array
-    for (var i = this.options.build.app.schemas.length - 1; i >= 0; i--) {
-
-      // Isolates the individual schema
-      let schema = this.options.build.app.schemas[i]
+    this.options.build.app.schemas.forEach(async (schema) => {
 
       // Defines the schema-specific destination
       let resourceDest = dest + 'server/api/' + schema.identifier
@@ -44,7 +41,7 @@ module.exports = class ExpressJsResourceSpec extends Generator {
         );
       }
 
-    } // End loop
+    })
 
     // Writes the entrypoint in web_api/test/index.js
     specPaths = specPaths.map((p) => {

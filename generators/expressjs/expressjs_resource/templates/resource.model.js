@@ -61,6 +61,14 @@ const <%= schema.class_name %> = new mongoose.Schema({
 
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (rel.type === 'BELONGS_TO') { _%>
+// Specifying a virtual with a `ref` property is how you enable virtual population
+<%= schema.class_name %>.virtual('<%= rel.alias.identifier %>', {
+  ref: '<%= rel.schema.class_name %>',
+  localField: '<%= rel.alias.identifier + "_id" %>',
+  foreignField: '_id',
+  justOne: true // Only return one <%= rel.schema.class_name %>
+});
+// Same as above just as a method
 <%= schema.class_name %>.methods.get<%= rel.alias.class_name %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').findById(this.<%= rel.alias.identifier + '_id' %>);
 }
@@ -77,5 +85,7 @@ const <%= schema.class_name %> = new mongoose.Schema({
 <%_ } _%>
 <%_ }) _%>
 // // // //
+
+<%= schema.class_name %>.set('toJSON', { getters: true, virtuals: true });
 
 module.exports = mongoose.model('<%= schema.class_name %>', <%= schema.class_name %>)

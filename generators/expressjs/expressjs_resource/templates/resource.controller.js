@@ -40,7 +40,13 @@ exports.profile = (req, res) => {
 * @apiError (Error) 500 Internal server error
 */
 module.exports.list = (req, res, next) => {
-    return <%= schema.class_name %>.find({})
+    return <%= schema.class_name %>
+    .find({})
+    <%_ schema.relations.forEach((rel) => { _%>
+    <%_ if (rel.type === 'BELONGS_TO') { _%>
+    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+    <%_ } _%>
+    <%_ }) _%>
     .then((response) => {
         return res
         .status(200)
@@ -85,6 +91,11 @@ module.exports.create = (req, res, next) => {
 */
 module.exports.show = (req, res, next) => {
     return <%= schema.class_name %>.findById(req.params.id)
+    <%_ schema.relations.forEach((rel) => { _%>
+    <%_ if (rel.type === 'BELONGS_TO') { _%>
+    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+    <%_ } _%>
+    <%_ }) _%>
     .then((response) => {
         return res
         .status(200)

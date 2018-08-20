@@ -94,12 +94,15 @@ module.exports.show = (req, res, next) => {
     <%_ schema.relations.forEach((rel) => { _%>
     <%_ if (rel.type === 'BELONGS_TO') { _%>
     .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+    <%_ } else if (rel.type === 'OWNS_MANY') { _%>
+    // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
     <%_ } _%>
     <%_ }) _%>
     .then((response) => {
         return res
         .status(200)
         .send(response)
+        // .send(response.toJSON({ getters: true, virtuals: true }))
         .end();
     })
     .catch(handleError(res));

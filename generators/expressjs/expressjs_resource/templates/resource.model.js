@@ -68,6 +68,9 @@ const <%= schema.class_name %> = new mongoose.Schema({
   foreignField: '_id',
   justOne: true // Only return one <%= rel.schema.class_name %>
 });
+
+<%= schema.class_name %>.set('toJSON', { getters: true, virtuals: true });
+
 // Same as above just as a method
 <%= schema.class_name %>.methods.get<%= rel.alias.class_name %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').findById(this.<%= rel.alias.identifier + '_id' %>);
@@ -83,6 +86,7 @@ const <%= schema.class_name %> = new mongoose.Schema({
   // justOne: true // Only return one <%= rel.schema.class_name %>
 });
 
+
 <%_ } else if (rel.type === 'HAS_MANY') { _%>
 <%= schema.class_name %>.methods.get<%= rel.schema.class_name_plural %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').find({ <%= schema.identifier + '_id' %>: this._id });
@@ -94,8 +98,7 @@ const <%= schema.class_name %> = new mongoose.Schema({
 }
 <%_ } _%>
 <%_ }) _%>
-// // // //
 
-// <%= schema.class_name %>.set('toJSON', { getters: true, virtuals: true });
+// // // //
 
 module.exports = mongoose.model('<%= schema.class_name %>', <%= schema.class_name %>)

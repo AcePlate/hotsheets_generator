@@ -1,5 +1,5 @@
 const _ = require('lodash')
-
+const { inflateRelation } = require('codotype/lib/inflator')
 // formatBuild
 // Fomats the build parameters for the generator
 // Mostly adds some additional metadata to each relation to simplify template rendering
@@ -9,82 +9,92 @@ module.exports.formatBuild = (build) => {
     build.app.schemas = _.map(build.app.schemas, (schema) => {
 
         // Isolates relations
-        let relations = []
+        // let relations = []
 
         // Iterates over all attributes, handles relations
-        schema.attributes = _.map(schema.attributes, (attr) => {
-            if (attr.datatype !== 'RELATION') return attr
+        // schema.attributes = _.map(schema.attributes, (attr) => {
+        //     if (attr.datatype !== 'RELATION') return attr
 
-            let relatedSchema = _.find(build.app.schemas, { _id: attr.datatypeOptions.schema_id })
+        //     let relatedSchema = _.find(build.app.schemas, { _id: attr.datatypeOptions.schema_id })
 
-            // Debugging
-            // console.log(attr.datatypeOptions)
-            // console.log(relatedSchema)
+        //     // Debugging
+        //     // console.log(attr.datatypeOptions)
+        //     // console.log(relatedSchema)
 
-            // Pulls metadata from relatedSchema
-            let { label, label_plural, identifier, identifier_plural, class_name, class_name_plural } = relatedSchema
-            attr.datatypeOptions.schema_label = label
-            attr.datatypeOptions.schema_label_plural = label_plural
-            attr.datatypeOptions.schema_identifier = identifier
-            attr.datatypeOptions.schema_identifier_plural = identifier_plural
-            attr.datatypeOptions.schema_class_name = class_name
-            attr.datatypeOptions.schema_class_name_plural = class_name_plural
-            attr.datatypeOptions.lead_attr = relatedSchema.attributes[0].identifier
+        //     // Pulls metadata from relatedSchema
+        //     let { label, label_plural, identifier, identifier_plural, class_name, class_name_plural } = relatedSchema
+        //     attr.datatypeOptions.schema_label = label
+        //     attr.datatypeOptions.schema_label_plural = label_plural
+        //     attr.datatypeOptions.schema_identifier = identifier
+        //     attr.datatypeOptions.schema_identifier_plural = identifier_plural
+        //     attr.datatypeOptions.schema_class_name = class_name
+        //     attr.datatypeOptions.schema_class_name_plural = class_name_plural
+        //     attr.datatypeOptions.lead_attr = relatedSchema.attributes[0].identifier
 
-            let relation = {
-              name: '',
-              type: '',
-              action: '',
-              method: '',
-              getter: '',
-              computed: ''
-            }
+        //     let relation = {
+        //       name: '',
+        //       type: '',
+        //       action: '',
+        //       method: '',
+        //       getter: '',
+        //       computed: ''
+        //     }
 
-            if (attr.datatypeOptions.relationType === 'HAS_MANY') {
-                relation.name = `${attr.datatypeOptions.schema_class_name}ListWidget`
-                relation.label = `Related ${attr.datatypeOptions.schema_label_plural}`
-                relation.type = 'LIST'
-                relation.url = attr.datatypeOptions.schema_identifier_plural
-                relation.module = `${schema.identifier}`
-                relation.action = `fetch${attr.datatypeOptions.schema_class_name_plural}`
-                relation.method = `fetch${attr.datatypeOptions.schema_class_name_plural}`
-                relation.getter = `${attr.datatypeOptions.schema_identifier_plural}`
-                relation.computed = `${attr.datatypeOptions.schema_identifier_plural}`
-                relation.state = `${attr.datatypeOptions.schema_identifier_plural}`
-                relation.state_value = "[]"
-            } else if (attr.datatypeOptions.relationType === 'OWNS_MANY') {
-                relation.name = `${attr.datatypeOptions.schema_class_name}ListWidget`
-                relation.label = `Related ${attr.datatypeOptions.schema_label_plural}`
-                relation.type = 'LIST'
-                relation.url = attr.datatypeOptions.schema_identifier_plural
-                relation.module = `${schema.identifier}`
-                relation.action = `fetch${attr.datatypeOptions.schema_class_name_plural}`
-                relation.method = `fetch${attr.datatypeOptions.schema_class_name_plural}`
-                relation.getter = `${attr.datatypeOptions.schema_identifier_plural}`
-                relation.computed = `${attr.datatypeOptions.schema_identifier_plural}`
-                relation.state = `${attr.datatypeOptions.schema_identifier_plural}`
-                relation.state_value = "[]"
-            } else {
-                relation.name = `${attr.datatypeOptions.schema_class_name}ShowWidget`
-                relation.label = `Related ${attr.datatypeOptions.schema_label}`
-                relation.type = 'SHOW'
-                relation.url = attr.datatypeOptions.schema_identifier
-                relation.module = `${schema.identifier}`
-                relation.action = `fetch${attr.datatypeOptions.schema_class_name}`
-                relation.method = `fetch${attr.datatypeOptions.schema_class_name}`
-                relation.getter = `${attr.datatypeOptions.schema_identifier}`
-                relation.computed = `${attr.datatypeOptions.schema_identifier}`
-                relation.state = `${attr.datatypeOptions.schema_identifier}`
-                relation.state_value = "{}"
-            }
+        //     if (attr.datatypeOptions.relationType === 'HAS_MANY') {
+        //         relation.name = `${attr.datatypeOptions.schema_class_name}ListWidget`
+        //         relation.label = `Related ${attr.datatypeOptions.schema_label_plural}`
+        //         relation.type = 'LIST'
+        //         relation.url = attr.datatypeOptions.schema_identifier_plural
+        //         relation.module = `${schema.identifier}`
+        //         relation.action = `fetch${attr.datatypeOptions.schema_class_name_plural}`
+        //         relation.method = `fetch${attr.datatypeOptions.schema_class_name_plural}`
+        //         relation.getter = `${attr.datatypeOptions.schema_identifier_plural}`
+        //         relation.computed = `${attr.datatypeOptions.schema_identifier_plural}`
+        //         relation.state = `${attr.datatypeOptions.schema_identifier_plural}`
+        //         relation.state_value = "[]"
+        //     } else if (attr.datatypeOptions.relationType === 'OWNS_MANY') {
+        //         relation.name = `${attr.datatypeOptions.schema_class_name}ListWidget`
+        //         relation.label = `Related ${attr.datatypeOptions.schema_label_plural}`
+        //         relation.type = 'LIST'
+        //         relation.url = attr.datatypeOptions.schema_identifier_plural
+        //         relation.module = `${schema.identifier}`
+        //         relation.action = `fetch${attr.datatypeOptions.schema_class_name_plural}`
+        //         relation.method = `fetch${attr.datatypeOptions.schema_class_name_plural}`
+        //         relation.getter = `${attr.datatypeOptions.schema_identifier_plural}`
+        //         relation.computed = `${attr.datatypeOptions.schema_identifier_plural}`
+        //         relation.state = `${attr.datatypeOptions.schema_identifier_plural}`
+        //         relation.state_value = "[]"
+        //     } else {
+        //         relation.name = `${attr.datatypeOptions.schema_class_name}ShowWidget`
+        //         relation.label = `Related ${attr.datatypeOptions.schema_label}`
+        //         relation.type = 'SHOW'
+        //         relation.url = attr.datatypeOptions.schema_identifier
+        //         relation.module = `${schema.identifier}`
+        //         relation.action = `fetch${attr.datatypeOptions.schema_class_name}`
+        //         relation.method = `fetch${attr.datatypeOptions.schema_class_name}`
+        //         relation.getter = `${attr.datatypeOptions.schema_identifier}`
+        //         relation.computed = `${attr.datatypeOptions.schema_identifier}`
+        //         relation.state = `${attr.datatypeOptions.schema_identifier}`
+        //         relation.state_value = "{}"
+        //     }
 
-            relations.push(relation)
-            // console.log(relation)
+        //     relations.push(relation)
+        //     // console.log(relation)
 
-            return attr
+        //     return attr
+        // })
+
+        // Inflate relations
+        schema.relations = _.map(schema.relations, (relation) => {
+            let rel = inflateRelation({
+                relation: relation,
+                schemas: build.app.schemas
+            })
+            let relatedSchema = build.app.schemas.find(s => s._id === rel.related_schema_id)
+            let reverse_relation = relatedSchema.relations.find(r => r._id === rel.reverse_relation_id)
+            rel.reverse_relation = _.cloneDeep(reverse_relation)
+            return rel
         })
-
-        schema.relations = relations
 
         return schema
     })

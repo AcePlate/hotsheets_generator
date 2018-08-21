@@ -4,8 +4,8 @@ const fsExtra = require('fs-extra')
 
 // // // //
 
-// BlazeplateGenerator class definition
-module.exports = class BlazeplateGenerator {
+// CodotypeGenerator class definition
+module.exports = class CodotypeGenerator {
 
   // constructor
   // Handles build options
@@ -73,15 +73,14 @@ module.exports = class BlazeplateGenerator {
 
   // templatePath
   // TODO - finish implementing this function with __dirname
-  templatePath (dir, path) {
-    return dir + '/templates/' + path
-
+  templatePath (dirname, tpath) {
+    return dirname + '/templates/' + tpath
   }
 
   // destinationPath
   // TODO - finish implementing this function __dirname
-  destinationPath (path) {
-    return path
+  destinationPath (dpath) {
+    return dpath
   }
 
   // composeWith
@@ -94,7 +93,7 @@ module.exports = class BlazeplateGenerator {
     // Logs which generator is being run
     console.log(`Generating ${generatorClass.name}...`)
 
-    // Invokes BlazeplateGenerator.write()
+    // Invokes CodotypeGenerator.write()
     return generatorInstance.write()
   }
 

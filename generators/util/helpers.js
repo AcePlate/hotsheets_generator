@@ -86,10 +86,14 @@ module.exports.formatBuild = (build) => {
 
         // Inflate relations
         schema.relations = _.map(schema.relations, (relation) => {
-            return inflateRelation({
+            let rel = inflateRelation({
                 relation: relation,
                 schemas: build.app.schemas
             })
+            let relatedSchema = build.app.schemas.find(s => s._id === rel.related_schema_id)
+            let reverse_relation = relatedSchema.relations.find(r => r._id === rel.reverse_relation_id)
+            rel.reverse_relation = _.cloneDeep(reverse_relation)
+            return rel
         })
 
         return schema

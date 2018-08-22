@@ -1,10 +1,10 @@
 const _ = require('lodash')
 const { inflateRelation } = require('codotype/lib/inflator')
 
-// formatBuild
+// inflate
 // Fomats the build parameters for the generator
 // Mostly adds some additional metadata to each relation to simplify template rendering
-module.exports.formatBuild = (app) => {
+module.exports.inflate = (app) => {
 
     // Iterates over each schema
     app.schemas = _.map(app.schemas, (schema) => {

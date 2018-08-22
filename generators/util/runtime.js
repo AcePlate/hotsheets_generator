@@ -1,7 +1,7 @@
 const ejs = require('ejs')
 const path = require('path');
 const fsExtra = require('fs-extra')
-const Helpers = require('./helpers')
+const { inflate } = require('./helpers')
 
 // // // //
 
@@ -18,15 +18,15 @@ module.exports = class CodotypeRuntime {
     // Assigns this.options
     this.options = options;
 
-    // Assigns CWD
+    // Assigns this.options.cwd
     this.options.cwd = process.cwd();
 
-    // Assigns this.dest
+    // Assigns this.options.dest
     const OUTPUT_DIRECTORY = 'build'
     this.options.dest = path.join(this.options.cwd, OUTPUT_DIRECTORY, this.options.project_path)
 
     // Inflates application metadata
-    this.options.app = Helpers.formatBuild(this.options.app)
+    this.options.app = inflate(this.options.app)
 
     // Returns the runtime instance
     return this

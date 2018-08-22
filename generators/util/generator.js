@@ -11,11 +11,16 @@ module.exports = class CodotypeGenerator {
   // Handles build options
   constructor (options) {
 
+    // Assigns this.options
+    this.options = options;
+
     // Assigns helper libraries to class variables
     this.fs = fsExtra
 
-    // Assigns this.options
-    this.options = options;
+    // PASS this.options.resolved in from codotype/codotype
+    this.resolved = this.options.resolved;
+
+    // Returns the instance
     return this
   }
 
@@ -27,9 +32,10 @@ module.exports = class CodotypeGenerator {
 
   // ensureDir
   // Ensures presence of directory for template compilation
-  async ensureDir (dest) {
+  async ensureDir (dir) {
+    const destination_path = path.join(this.options.dest, dir)
     return new Promise((resolve, reject) => {
-      return this.fs.ensureDir(dest, (err) => {
+      return this.fs.ensureDir(destination_path, (err) => {
         if (err) return reject(err)
         return resolve()
       })
@@ -47,12 +53,17 @@ module.exports = class CodotypeGenerator {
     })
   }
 
-  // copyTemplate
-  // Compiles an EJS template and writes the result to the dest location
-  async copyTemplate (src, dest, data) {
+  // renderTemplate
+  // Compiles an EJS template and returns the result
+  renderTemplate (src, options = {}) {
     return new Promise((resolve, reject) => {
 
       let renderOptions = {}
+
+      const data = {
+        app: this.options.app,
+        ...options
+      }
 
       // Compiles EJS template
       return ejs.renderFile(src, data, renderOptions, (err, str) => {
@@ -60,41 +71,73 @@ module.exports = class CodotypeGenerator {
         // Handles template compilation error
         if (err) return reject(err)
 
-        // Writes the compiled template to the dest location
-        this.fs.writeFile(dest, str, (err) => {
-          if (err) return reject(err)
-          return resolve();
-        });
+        // Resolves with compiled template
+        return resolve(str);
 
       })
 
     })
   }
 
+  // copyTemplate
+  // Compiles a template and writes to the dest location
+  async copyTemplate (src, dest, options = {}) {
+    return new Promise(async (resolve, reject) => {
+
+      const compiledTemplate = await this.renderTemplate(src, options)
+
+      // Writes the compiled template to the dest location
+      this.fs.writeFile(dest, compiledTemplate, (err) => {
+        if (err) return reject(err)
+        return resolve();
+      });
+
+    })
+  }
+
   // templatePath
-  // TODO - finish implementing this function with __dirname
-  templatePath (dirname, tpath) {
-    return dirname + '/templates/' + tpath
+  // TODO - document
+  templatePath (template_path = './') {
+    return path.join(this.resolved, 'templates', template_path)
   }
 
   // destinationPath
-  // TODO - finish implementing this function __dirname
-  destinationPath (dpath) {
-    return dpath
+  // TODO - document
+  destinationPath (destination_path = './') {
+    return path.join(this.options.dest, destination_path)
   }
 
   // composeWith
   // Enables one generator to fire off several child generators
-  async composeWith (generatorClass) {
+  // TODO - clean up + document this function
+  async composeWith (modulePath, options={}) {
 
-    // Instantiates a nwe generatorClass object with this.options
-    let generatorInstance = new generatorClass(this.options)
+    // Defines module path
+    modulePath = path.join(path.dirname(this.resolved), modulePath)
 
-    // Logs which generator is being run
-    console.log(`Generating ${generatorClass.name}...`)
+    try {
+      const GeneratorClass = require(modulePath); // eslint-disable-line import/no-dynamic-require
+      GeneratorClass.resolved = require.resolve(modulePath);
 
-    // Invokes CodotypeGenerator.write()
-    return generatorInstance.write()
+      console.log(`Running ${GeneratorClass.name}...`)
+
+      const generator = new GeneratorClass({
+        ...this.options,
+        resolved: modulePath
+      })
+      await generator.write(this.options)
+      // console.log(`Generated ${GeneratorClass.name}.`)
+
+      // Logs which generator is being run
+    } catch (err) {
+      if (err.code === 'MODULE_NOT_FOUND') {
+        console.log('MODULE NOT FOUND')
+      } else {
+        console.log('OTHER ERROR')
+        throw err;
+      }
+    }
+
   }
 
 }

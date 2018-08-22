@@ -17,3 +17,21 @@ module.exports = class extends Generator {
 
 };
 
+
+// // TODO - integrate into write() method
+// async writeBuildManifest (req, buildId) {
+//   return new Promise((resolve, reject) => {
+
+//     // Makes /build/buildId
+//     this.fs.mkdirSync(__dirname + `/build/${buildId}`)
+
+//     // Writes blazeplate.json file
+//     this.fs.writeFile(__dirname + `/build/${buildId}/blazeplate.json`, JSON.stringify(req.body, null, 2), (err) => {
+//       if (err) throw err;
+//       // console.log(`Build ${buildId} manfiest saved`);
+//       return resolve()
+//     });
+
+//   });
+
+// }

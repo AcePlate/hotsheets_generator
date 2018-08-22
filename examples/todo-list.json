@@ -137,6 +137,16 @@
       "attributes": [
         {
           "order": 0,
+          "label": "Label",
+          "identifier": "label",
+          "help": "",
+          "required": true,
+          "unique": true,
+          "datatype": "TEXT",
+          "datatypeOptions": {}
+        },
+        {
+          "order": 1,
           "label": "Done",
           "identifier": "done",
           "help": "",
@@ -145,16 +155,6 @@
           "datatype": "BOOL",
           "datatypeOptions": {},
           "_id": "5b26d2eb7c4ee7e7270ec550"
-        },
-        {
-          "order": 1,
-          "label": "Label",
-          "identifier": "label",
-          "help": "",
-          "required": true,
-          "unique": true,
-          "datatype": "TEXT",
-          "datatypeOptions": {}
         },
         {
           "order": 2,

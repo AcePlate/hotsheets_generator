@@ -1,7 +1,6 @@
 # codotype-generator
 Codebase generators that power [codotype.io](http://codotype.io).
 
-
 ## System Requirements
 - [Git](https://git-scm.com/)
 - [Node.js](https://nodejs.org/en/)

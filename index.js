@@ -1,10 +1,10 @@
-const Generator = require('./generators/util/generator')
-const Helpers = require('./generators/util/helpers')
-const Runtime = require('./generators/util/runtime')
+const Generator = require('./lib/generator')
+const helpers = require('./lib/helpers')
+const runtime = require('./lib/runtime')
 
-// export codotype-generator library
+// Export codotype libraries
 module.exports = {
   Generator,
-  Helpers,
-  Runtime
+  helpers,
+  runtime
 }

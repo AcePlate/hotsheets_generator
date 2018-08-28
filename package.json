@@ -1,14 +1,14 @@
 {
-  "name": "codotype-generator",
+  "name": "@codotype/codotype-generator",
   "version": "0.1.0",
-  "description": "",
+  "description": "Codebase generators that power [codotype.io](http://codotype.io).",
   "main": "index.js",
   "scripts": {
     "test": "node codotype.js"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/codotype/codotype-generator.git"
+    "type": "git",
+    "url": "git+https://github.com/codotype/codotype-generator.git"
   },
   "dependencies": {
     "ejs": "^2.6.1",
@@ -17,5 +17,16 @@
     "lodash": "^4.17.10",
     "pluralize": "^7.0.0",
     "underscore.string": "^3.3.4"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/codotype/codotype-generator/issues"
+  },
+  "homepage": "https://github.com/codotype/codotype-generator#readme",
+  "directories": {
+    "example": "examples",
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "author": "Alexander Schwartzberg",
+  "license": "MIT"
 }

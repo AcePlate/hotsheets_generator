@@ -1,5 +1,5 @@
 {
-  "name": "@codotype/codotype-generator",
+  "name": "@codotype/generator",
   "version": "0.1.0",
   "description": "Codebase generators that power [codotype.io](http://codotype.io).",
   "main": "index.js",

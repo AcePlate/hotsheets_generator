@@ -1,6 +1,6 @@
 {
   "name": "@codotype/generator",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Generator system that produces code scaffolding from metadata",
   "main": "index.js",
   "scripts": {
@@ -18,14 +18,13 @@
     "lodash": "^4.17.10"
   },
   "devDependencies": {
-    "@codotype/blueprints": "^0.1.0"
+    "@codotype/blueprints": "^0.2.0"
   },
   "bugs": {
     "url": "https://github.com/codotype/codotype-generator/issues"
   },
   "homepage": "https://github.com/codotype/codotype-generator#readme",
   "directories": {
-    "example": "examples",
     "lib": "lib"
   },
   "author": "Alexander Schwartzberg",

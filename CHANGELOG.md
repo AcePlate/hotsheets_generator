@@ -2,6 +2,7 @@
 
 #### Features
 * Added `renderComponent` method
+* Refactored `compileInPlace` handler
 * Refactored `composeWith` method - parent now instantiates new Generator instances
 * Bumped `@codotype/blueprints` dependency
 
